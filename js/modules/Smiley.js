@@ -4,7 +4,7 @@ import { AbstractForm } from './AbstractForm.js';
  * Déssine un triangle
  */
 export class Smiley extends AbstractForm {
-  // add default values to avoid errors on empty arguments
+  // Ajout d'un paramètre 'type' pour choisir quel type de smiley dessiner
   constructor(
     x = 0,
     y = 0,
@@ -14,84 +14,134 @@ export class Smiley extends AbstractForm {
     strokeColor = '',
     strokeWidth = 2,
     pesenteur = false,
-    ordreConstruction = 100
+    ordreConstruction = 100,
+    type = 'happy'  // 'happy' est le type par défaut
   ) {
-    super(x, y, width, height, fillColor, strokeColor, strokeWidth, pesenteur, ordreConstruction)
+    super(x, y, width, height, fillColor, strokeColor, strokeWidth, pesenteur, ordreConstruction);
+    this.type = type;  // Stocke le type du smiley
   }
 
+  // Fonction pour dessiner un smiley heureux
+  smileyHappy(ctx, dx, dy) {
+    const ox = dx, oy = dy;
 
-   smiley(ctx, dx, dy) {
-    let ox = dx
-    let oy = dy
-        // si pesenteur pousse l'objet au bas de l'écran
+    ctx.save();
 
-    ctx.save()
-
-    // TODO prendre en compte this.fillColor et autres propriétés de l'objet (voir la classe de base)
-    // prendre exemple sur Triangle.js
-    
-    // décommenter l'instruction ci-dessous pour pass en mode debogueur
-    //debugger
-    let r = Math.round(Math.random() * 255)
-    let g = Math.round(Math.random() * 255)
-    let b = Math.round(Math.random() * 255)
-
-    let rgb = `rgb(${r}, ${g}, ${b})`
-
-    // console.log(`Valeur rgb : ${rgb}`)
-
+    // Visage
     ctx.beginPath();
-    ctx.arc(ox + 50, oy + 50, 50, 0, Math.PI * 2, true);  // Cercle extérieur
-    ctx.fillStyle =  rgb // this.fillColor 
-    ctx.fill()
-
-    ctx.beginPath();
-
-    ctx.fillStyle = 'red'; // Couleur des yeux
-    ctx.beginPath();
-    ctx.arc(ox + 35, oy + 40, 5, 0, Math.PI * 2, true); // Oeil gauche
+    ctx.arc(ox + 50, oy + 50, 50, 0, Math.PI * 2, true);
+    ctx.fillStyle = 'yellow';
     ctx.fill();
-    ctx.beginPath();
-    ctx.arc(ox + 65, oy + 40, 5, 0, Math.PI * 2, true); // Oeil droit
-    ctx.fill();
-    ctx.moveTo(ox + 85, oy + 50);
-    ctx.arc(ox + 50, oy + 50, 35, 0, Math.PI, false);  // Bouche (sens horaire)
-    ctx.moveTo(ox + 40, oy + 40);
-    
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 2;
     ctx.stroke();
 
-    // restores the styles from earlier
-    // preventing the colors used here
-    // from polluting other drawings
-    ctx.restore()
-}
+    // Yeux
+    ctx.beginPath();
+    ctx.arc(ox + 35, oy + 40, 5, 0, Math.PI * 2, true); // oeuil gauche
+    ctx.arc(ox + 65, oy + 40, 5, 0, Math.PI * 2, true); // oeil droit
+    ctx.fillStyle = 'red';
+    ctx.fill();
 
-  /**
-   * Dessine la forme spécifique à cette classe
-   * @param ctx contexte 2D du canvas
-   */
+    // Bouche
+    ctx.beginPath();
+    ctx.arc(ox + 50, oy + 60, 25, 0, Math.PI, false); // Demicercle
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  // Fonction pour dessiner un smiley triste
+  smileySad(ctx, dx, dy) {
+    const ox = dx, oy = dy;
+
+    ctx.save();
+
+    // Visage
+    ctx.beginPath();
+    ctx.arc(ox + 50, oy + 50, 50, 0, Math.PI * 2, true);
+    ctx.fillStyle = 'yellow';
+    ctx.fill();
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Yeux
+    ctx.beginPath();
+    ctx.arc(ox + 35, oy + 40, 5, 0, Math.PI * 2, true); // oeil gauche
+    ctx.arc(ox + 65, oy + 40, 5, 0, Math.PI * 2, true); // oeil droit
+    ctx.fillStyle = 'red';
+    ctx.fill();
+
+    // Bouche
+    ctx.beginPath();
+    ctx.arc(ox + 50, oy + 70, 25, 0, Math.PI, true); // Demi cercle inversé
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  // Fonction pour dessiner un smiley surpris
+  smileySurprised(ctx, dx, dy) {
+    const ox = dx, oy = dy;
+
+    ctx.save();
+
+    // Visage
+    ctx.beginPath();
+    ctx.arc(ox + 50, oy + 50, 50, 0, Math.PI * 2, true);
+    ctx.fillStyle = 'yellow';
+    ctx.fill();
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Yeux
+    ctx.beginPath();
+    ctx.arc(ox + 35, oy + 40, 8, 0, Math.PI * 2, true); // oeil gauche
+    ctx.arc(ox + 65, oy + 40, 8, 0, Math.PI * 2, true); // oeil droit
+    ctx.fillStyle = 'red';
+    ctx.fill();
+
+    // Bouche
+    ctx.beginPath();
+    ctx.arc(ox + 50, oy + 60, 15, 0, Math.PI * 2, true);
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  // Méthode pour dessiner le smiley en fonction du type
   draw(ctx) {
-    super.draw(ctx)
-    this.smiley(ctx, this.x, this.y) // width always = 50 :( -- TODO change this
+    super.draw(ctx);
+    if (this.type === 'happy') {
+      this.smileyHappy(ctx, this.x, this.y);
+    } else if (this.type === 'sad') {
+      this.smileySad(ctx, this.x, this.y);
+    } else if (this.type === 'surprised') {
+      this.smileySurprised(ctx, this.x, this.y);
+    }
   }
 
   /**
    * get array of forms
    * @param ctx Canvas 2D context
-   * @return {[Triangle,...]}
+   * @return {[Smiley,...]}
    */
   static buildForms(ctx) {
-    const w = ctx.canvas.height/5
-    // console.log("w = " + w)
-    let forms = []
-    // ~~(Math.random() * 5) + 5 // max in [5..10]
-    forms.push(new Smiley(~~(Math.random() * 500) , ~~(Math.random() * 500),w, w,'blue','black', 1, true,50))
-    forms.push(new Smiley(~~(Math.random() * 500) ,~~(Math.random() * 700),w, w,'blue','black', 1, false,50))
+    const w = ctx.canvas.height / 5;
+    let forms = [];
 
-    // console.log('nb de smileys : ' + forms.length)
+    forms.push(new Smiley(~~(Math.random() * 500), ~~(Math.random() * 500), w, w, 'blue', 'black', 1, true, 50, 'happy'));
+    forms.push(new Smiley(~~(Math.random() * 500), ~~(Math.random() * 700), w, w, 'blue', 'black', 1, false, 50, 'sad'));
+    forms.push(new Smiley(~~(Math.random() * 500), ~~(Math.random() * 700), w, w, 'blue', 'black', 1, false, 50, 'surprised'));
 
-    // retourne un tableau d'objets de type Smiley
-    return forms
+    return forms;
   }
-
 }
