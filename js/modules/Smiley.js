@@ -46,12 +46,18 @@ export class Smiley extends AbstractForm {
     ctx.fill()
 
     ctx.beginPath();
+
+    ctx.fillStyle = 'red'; // Couleur des yeux
+    ctx.beginPath();
+    ctx.arc(ox + 35, oy + 40, 5, 0, Math.PI * 2, true); // Oeil gauche
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(ox + 65, oy + 40, 5, 0, Math.PI * 2, true); // Oeil droit
+    ctx.fill();
     ctx.moveTo(ox + 85, oy + 50);
     ctx.arc(ox + 50, oy + 50, 35, 0, Math.PI, false);  // Bouche (sens horaire)
     ctx.moveTo(ox + 40, oy + 40);
-    ctx.arc(ox + 35, oy + 40, 5, 0, Math.PI * 2, true);  // Oeil gauche
-    ctx.moveTo(ox + 70, oy + 40);
-    ctx.arc(ox + 65, oy + 40, 5, 0, Math.PI * 2, true);  // Oeil droite
+    
     ctx.stroke();
 
     // restores the styles from earlier
